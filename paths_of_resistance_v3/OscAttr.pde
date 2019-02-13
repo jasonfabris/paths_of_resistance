@@ -15,7 +15,7 @@ class OscAttr {
     loc_x = width/2;
     loc_y = height/2;
     loc = new PVector (loc_x, loc_y);
-    amp = 2;
+    amp = 2; //2
     period = 80; // every 2 seconds?
   
   }

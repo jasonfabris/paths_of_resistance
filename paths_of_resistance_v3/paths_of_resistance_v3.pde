@@ -3,7 +3,7 @@ ArrayList<Vehicle> vehicles = new ArrayList<Vehicle>();
 PVector target;
 OscAttr osc1;
 
-float num_v = 128;
+float num_v = 136;
 String fname;
 
 void setup() {
@@ -17,8 +17,9 @@ void setup() {
   float space = 360 / num_v;
   
   for (int i = 0; i < 360; i+=space) {
-    
-    
+        
+    //float lx = width/2 + randomGaussian() * 10 + rad * cos(radians(i));
+    //float ly = height/2 + randomGaussian() * 10 + rad * sin(radians(i));
     float lx = width/2 + rad * cos(radians(i));
     float ly = height/2 + rad * sin(radians(i));
     
@@ -27,7 +28,7 @@ void setup() {
     vehicles.add(new Vehicle(l));
   }
   
-  background(215, 8, 97);
+  background(222, 8, 98);
   
   target = new PVector(width/2, height/2);
   
@@ -50,19 +51,28 @@ void draw() {
     Vehicle v = vehicles.get(i);
     
     if (i == 0) {
-      t = vehicles.get(vehicles.size() - 1);
-    } else if (i % 10 == 0) {
-      ////println(i, i % 9);
-      t = vehicles.get(vehicles.size() - 2);
+      //t = vehicles.get(vehicles.size() - 1);
       t = vehicles.get(int(random(vehicles.size())));
+      while (t == v) {
+        //t = vehicles.get(vehicles.size() - 3);
+        t = vehicles.get(int(random(vehicles.size())));
+      }
+      
+      
+    } else if (i % 10 == 0) {
+      t = vehicles.get(int(random(vehicles.size())));
+      while (t == v) {
+        //t = vehicles.get(vehicles.size() - 3);
+        t = vehicles.get(int(random(vehicles.size())));
+      }
       
     } else { 
-      t = vehicles.get(i - 1);
+      t = vehicles.get(max(i - 8, 0));  // play with this (i-1)
     }
     
     
     // random change of heart
-    if (random(1) < 0.001) {
+    if (random(1) < 0.5) {   //0.001
       float new_t = random(vehicles.size());
       if (floor(new_t) != i) {
         t = vehicles.get(floor(new_t));
@@ -79,11 +89,10 @@ void draw() {
     
     v.seek(target);
     
-    if (v.loc.dist(t.loc) < 10) {
-      v.apply_force(new PVector(random(-2,0), random(-2,0)));
+    if (v.loc.dist(t.loc) < 10 && frameCount > 1250) {  // 10? 100? 
+      v.apply_force(new PVector(v.vel.x * -1, v.vel.y * -1));  // -1 or random 80 or try seek instead of apply_force
+      //v.apply_force(v.vel.div(0.5));
     }
-    
-    
     
     v.update();
     v.display();
@@ -94,7 +103,7 @@ void draw() {
   //println(target.x, target.y);
   
  //save every so often
-  if (frameCount % 6000 == 0) {
+  if (frameCount % 2600 == 0) {
      save(fname); 
   } 
 }

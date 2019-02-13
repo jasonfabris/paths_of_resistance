@@ -1,6 +1,7 @@
 class Vehicle {
  
   PVector loc;
+  PVector old_loc;
   PVector acc;
   PVector vel;
   
@@ -33,15 +34,30 @@ void apply_force(PVector frc) {
 }
 
 void update() {
+   old_loc = loc.copy();
+   
    vel.add(acc);
    loc.add(vel);
    acc.mult(0);
 }
 
 void display() {
-   fill(100 + mass, 75, 30+(mass/10), 5);
-   noStroke();
-   ellipse(loc.x, loc.y, 10, 10);
+     
+    stroke(100 + mass, 85, 30+(mass/10), 6);
+   //noStroke();
+   
+   beginShape();
+     for (int i = 0; i <= 4; i++) {
+        float x = lerp(old_loc.x, loc.x, i/4.0);
+        float y = lerp(old_loc.y, loc.y, i/4.0);
+       vertex(x, y);
+     }
+   endShape();
+   
+   //fill(100 + mass, 75, 30+(mass/10), 5);
+   //noStroke();
+   
+   //ellipse(loc.x, loc.y, 10, 10);
    
 }
 
